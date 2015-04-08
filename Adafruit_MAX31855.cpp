@@ -81,13 +81,6 @@ double Adafruit_MAX31855::readCelsius(void) {
 
   //Serial.print("0x"); Serial.println(v, HEX);
 
-  /*
-  float internal = (v >> 4) & 0x7FF;
-  internal *= 0.0625;
-  if ((v >> 4) & 0x800) 
-    internal *= -1;
-  Serial.print("\tInternal Temp: "); Serial.println(internal);
-  */
 
   if (v & 0x7) {
     // uh oh, a serious problem!
