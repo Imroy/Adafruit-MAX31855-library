@@ -31,12 +31,16 @@ class Adafruit_MAX31855 {
   double readInternal(void);
   double readCelsius(void);
   double readFarenheit(void);
-  uint8_t readError();
+  uint8_t readError(void);
+  void clear(void);
 
  private:
   int8_t sclk, miso, cs, hSPI;
-  uint32_t spiread32(void);
-  uint32_t hspiread32(void);
+  uint32_t data;
+  bool have_data;
+
+  void spiread32(void);
+  void hspiread32(void);
 };
 
 #endif
