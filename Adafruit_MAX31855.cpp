@@ -17,7 +17,6 @@
 #include "Adafruit_MAX31855.h"
 #if defined(__AVR__)
 #include <avr/pgmspace.h>
-#include <util/delay.h>
 #endif
 #include <stdlib.h>
 #include <SPI.h>
@@ -133,21 +132,21 @@ uint32_t Adafruit_MAX31855::spiread32(void) {
   }
 
   digitalWrite(sclk, LOW);
-  _delay_ms(1);
+  delay(1);
   digitalWrite(cs, LOW);
-  _delay_ms(1);
+  delay(1);
 
   for (i=31; i>=0; i--)
   {
     digitalWrite(sclk, LOW);
-    _delay_ms(1);
+    delay(1);
     d <<= 1;
     if (digitalRead(miso)) {
       d |= 1;
     }
 
     digitalWrite(sclk, HIGH);
-    _delay_ms(1);
+    delay(1);
   }
 
   digitalWrite(cs, HIGH);
@@ -164,7 +163,7 @@ uint32_t Adafruit_MAX31855::hspiread32(void) {
   } buffer;
   
   digitalWrite(cs, LOW);
-  _delay_ms(1);
+  delay(1);
   
   for (i=3;i>=0;i--) {
     buffer.bytes[i] = SPI.transfer(0x00);
