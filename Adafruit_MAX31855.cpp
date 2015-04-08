@@ -15,8 +15,10 @@
  ****************************************************/
 
 #include "Adafruit_MAX31855.h"
+#if defined(__AVR__)
 #include <avr/pgmspace.h>
 #include <util/delay.h>
+#endif
 #include <stdlib.h>
 #include <SPI.h>
 
