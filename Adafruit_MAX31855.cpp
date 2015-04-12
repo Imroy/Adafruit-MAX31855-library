@@ -100,8 +100,10 @@ void Adafruit_MAX31855::clear(void) {
 }
 
 void Adafruit_MAX31855::spiread32(void) {
-  if (hSPI)
+  if (hSPI) {
     hspiread32();
+    return;
+  }
 
   digitalWrite(sclk, LOW);
   delay(1);
