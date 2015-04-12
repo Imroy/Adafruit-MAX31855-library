@@ -57,21 +57,11 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t CS) {
 double Adafruit_MAX31855::readInternal(void) {
   if (!have_data)
     spiread32();
+  uint16_t internal = (data >> 4) & 0x0fff;
+  if (internal & 0x800)	// sign extension
+    internal |= 0xf000;
 
-  // ignore bottom 4 bits - they're just thermocouple data
-  data >>= 4;
-
-  // pull the bottom 11 bits off
-  float internal = data & 0x7FF;
-  // check sign bit!
-  if (data & 0x800) {
-    // Convert to negative value by extending sign and casting to signed type.
-    int16_t tmp = 0xF800 | (data & 0x7FF);
-    internal = tmp;
-  }
-  internal *= 0.0625; // LSB = 0.0625 degrees
-  //Serial.print("\tInternal Temp: "); Serial.println(internal);
-  return internal;
+  return internal * 0.0625;
 }
 
 double Adafruit_MAX31855::readCelsius(void) {
@@ -83,15 +73,11 @@ double Adafruit_MAX31855::readCelsius(void) {
   if (data & 0x7)
     return NAN;		// uh oh, a serious problem!
 
-  if (data & 0x80000000)
-    data = 0xFFFFC000 | ((data >> 18) & 0x00003FFF);	// Negative value, drop the lower 18 bits and explicitly extend sign bits.
-  else
-    data >>= 18;					// Positive value, just drop the lower 18 bits.
+  uint16_t tc = data >> 18;
+  if (tc & 0x2000)	// sign extension
+    tc |= 0xc000;
 
-  //Serial.println(data, HEX);
-  
-  // LSB = 0.25 degrees C
-  return (double)data * 0.25;
+  return tc * 0.25;
 }
 
 uint8_t Adafruit_MAX31855::readError(void) {
