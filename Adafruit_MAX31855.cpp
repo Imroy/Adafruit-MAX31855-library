@@ -27,7 +27,6 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t SCLK, int8_t CS, int8_t MISO) {
   cs = CS;
   miso = MISO;
   hSPI = 0;
-  have_data = false;
 
   //define pin modes
   pinMode(cs, OUTPUT);
@@ -40,7 +39,6 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t SCLK, int8_t CS, int8_t MISO) {
 Adafruit_MAX31855::Adafruit_MAX31855(int8_t CS) {
   cs = CS;
   hSPI = 1;
-  have_data = false;
 
   //define pin modes
   pinMode(cs, OUTPUT);
@@ -54,9 +52,7 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t CS) {
   digitalWrite(cs, HIGH);
 }
 
-double Adafruit_MAX31855::readInternal(void) {
-  if (!have_data)
-    spiread32();
+double Adafruit_MAX31855::internal(void) {
   uint16_t internal = (data >> 4) & 0x0fff;
   if (internal & 0x800)	// sign extension
     internal |= 0xf000;
@@ -64,12 +60,7 @@ double Adafruit_MAX31855::readInternal(void) {
   return internal * 0.0625;
 }
 
-double Adafruit_MAX31855::readCelsius(void) {
-  if (!have_data)
-    spiread32();
-
-  //Serial.print("0x"); Serial.println(data, HEX);
-
+double Adafruit_MAX31855::celsius(void) {
   if (data & 0x7)
     return NAN;		// uh oh, a serious problem!
 
@@ -80,26 +71,19 @@ double Adafruit_MAX31855::readCelsius(void) {
   return tc * 0.25;
 }
 
-uint8_t Adafruit_MAX31855::readError(void) {
-  if (!have_data)
-    spiread32();
-
+uint8_t Adafruit_MAX31855::error(void) {
   return data & 0x7;
 }
 
-double Adafruit_MAX31855::readFarenheit(void) {
-  float f = readCelsius();
+double Adafruit_MAX31855::farenheit(void) {
+  float f = celsius();
   f *= 9.0;
   f /= 5.0;
   f += 32;
   return f;
 }
 
-void Adafruit_MAX31855::clear(void) {
-  have_data = false;
-}
-
-void Adafruit_MAX31855::spiread32(void) {
+void Adafruit_MAX31855::readData(void) {
   if (hSPI) {
     hspiread32();
     return;
@@ -111,7 +95,7 @@ void Adafruit_MAX31855::spiread32(void) {
   delay(1);
 
   data = 0;
-  for (int i = 31; i >= 0; i--) {
+  for (int i = 32; i; i--) {
     digitalWrite(sclk, LOW);
     delay(1);
     data <<= 1;
@@ -123,8 +107,6 @@ void Adafruit_MAX31855::spiread32(void) {
   }
 
   digitalWrite(cs, HIGH);
-  //Serial.println(d, HEX);
-  have_data = true;
 }
 
 void Adafruit_MAX31855::hspiread32(void) {
@@ -143,5 +125,4 @@ void Adafruit_MAX31855::hspiread32(void) {
   digitalWrite(cs, HIGH);
   
   data = buffer.integer;
-  have_data = true;
 }
