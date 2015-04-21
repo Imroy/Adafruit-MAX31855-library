@@ -90,20 +90,20 @@ void Adafruit_MAX31855::readData(void) {
   }
 
   digitalWrite(sclk, LOW);
-  delay(1);
+  delayMicroseconds(1);
   digitalWrite(cs, LOW);
-  delay(1);
+  delayMicroseconds(1);
 
   data = 0;
   for (int i = 32; i; i--) {
     digitalWrite(sclk, LOW);
-    delay(1);
+    delayMicroseconds(1);
     data <<= 1;
     if (digitalRead(miso))
       data |= 1;
 
     digitalWrite(sclk, HIGH);
-    delay(1);
+    delayMicroseconds(1);
   }
 
   digitalWrite(cs, HIGH);
@@ -117,7 +117,7 @@ void Adafruit_MAX31855::hspiread32(void) {
   } buffer;
   
   digitalWrite(cs, LOW);
-  delay(1);
+  delayMicroseconds(1);
   
   for (int i=3; i>=0; i--)
     buffer.bytes[i] = SPI.transfer(0x00);
