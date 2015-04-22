@@ -110,19 +110,14 @@ void Adafruit_MAX31855::readData(void) {
 }
 
 void Adafruit_MAX31855::hspiread32(void) {
-  // easy conversion of four uint8_ts to uint32_t
-  union bytes_to_uint32 {
-    uint8_t bytes[4];
-    uint32_t integer;
-  } buffer;
-  
   digitalWrite(cs, LOW);
   delayMicroseconds(1);
   
-  for (int i=3; i>=0; i--)
-    buffer.bytes[i] = SPI.transfer(0x00);
+  data = 0;
+  for (uint8_t i = 4; i; i--) {
+    data <<= 8;
+    data |= SPI.transfer(0x00);
+  }
   
   digitalWrite(cs, HIGH);
-  
-  data = buffer.integer;
 }
