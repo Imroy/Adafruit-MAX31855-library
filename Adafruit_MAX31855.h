@@ -32,7 +32,6 @@ class Adafruit_MAX31855 {
   uint8_t error(void) const { return data & 0x7; }
   double internal(void);
   double celsius(void);
-  double farenheit(void);
 
  private:
   int8_t sclk, miso, cs, hSPI;

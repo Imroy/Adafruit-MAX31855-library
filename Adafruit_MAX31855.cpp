@@ -71,14 +71,6 @@ double Adafruit_MAX31855::celsius(void) {
   return (int16_t)tc * 0.25;
 }
 
-double Adafruit_MAX31855::farenheit(void) {
-  float f = celsius();
-  f *= 9.0;
-  f /= 5.0;
-  f += 32;
-  return f;
-}
-
 void Adafruit_MAX31855::readData(void) {
   if (hSPI) {
     hspiread32();
