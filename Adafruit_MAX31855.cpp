@@ -71,10 +71,6 @@ double Adafruit_MAX31855::celsius(void) {
   return tc * 0.25;
 }
 
-uint8_t Adafruit_MAX31855::error(void) {
-  return data & 0x7;
-}
-
 double Adafruit_MAX31855::farenheit(void) {
   float f = celsius();
   f *= 9.0;
