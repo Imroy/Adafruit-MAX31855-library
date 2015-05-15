@@ -68,7 +68,7 @@ double Adafruit_MAX31855::celsius(void) {
   if (tc & 0x2000)	// sign extension
     tc |= 0xc000;
 
-  return tc * 0.25;
+  return (int16_t)tc * 0.25;
 }
 
 double Adafruit_MAX31855::farenheit(void) {
