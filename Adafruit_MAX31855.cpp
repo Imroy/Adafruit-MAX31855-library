@@ -40,15 +40,14 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t CS) {
   cs = CS;
   hSPI = 1;
 
-  //define pin modes
+  // Define CS pin mode
   pinMode(cs, OUTPUT);
   
-  //start and configure hardware SPI
-  SPI.begin();
+  // Configure hardware SPI
   SPI.setBitOrder(MSBFIRST);
   SPI.setDataMode(SPI_MODE0);
   SPI.setClockDivider(SPI_CLOCK_DIV4);
-  
+
   digitalWrite(cs, HIGH);
 }
 
