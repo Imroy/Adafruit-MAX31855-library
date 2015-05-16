@@ -43,11 +43,6 @@ Adafruit_MAX31855::Adafruit_MAX31855(int8_t CS) {
   // Define CS pin mode
   pinMode(cs, OUTPUT);
   
-  // Configure hardware SPI
-  SPI.setBitOrder(MSBFIRST);
-  SPI.setDataMode(SPI_MODE0);
-  SPI.setClockDivider(SPI_CLOCK_DIV4);
-
   digitalWrite(cs, HIGH);
 }
 
@@ -97,6 +92,8 @@ void Adafruit_MAX31855::readData(void) {
 }
 
 void Adafruit_MAX31855::hspiread32(void) {
+  SPI.beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE0));
+
   digitalWrite(cs, LOW);
   delayMicroseconds(1);
   
@@ -107,4 +104,6 @@ void Adafruit_MAX31855::hspiread32(void) {
   }
   
   digitalWrite(cs, HIGH);
+
+  SPI.endTransaction();
 }
