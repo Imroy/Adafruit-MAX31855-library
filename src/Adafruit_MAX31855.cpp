@@ -51,7 +51,7 @@ double Adafruit_MAX31855::internal(void) {
   if (internal & 0x800)	// sign extension
     internal |= 0xf000;
 
-  return internal * 0.0625;
+  return (int16_t)internal * 0.0625;
 }
 
 double Adafruit_MAX31855::celsius(void) {
